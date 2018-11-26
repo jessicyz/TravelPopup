@@ -1,49 +1,47 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import {createStackNavigator} from 'react-navigation';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import LoginSignup from './screens/LoginSignup';
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+import {Colors, Fonts} from "./Config";
+
+const navBarWithBackButton = {
+    headerTransparent: false,
+    headerTintColor: Colors.primary,
+    headerStyle: {
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 0,
+        elevation: 0,
+        height: 40,
+    },
+    headerTitleStyle: {
+        fontWeight: Fonts.weight.medium,
+        fontFamily: Fonts.fontFamily,
+    },
+};
+
+const navBarDisabled = {
+    header: null,
+    gesturesEnabled: false,
+    mode: 'modal',
+};
+
+export default getRootStack = () => {
+    return createStackNavigator(
+        {
+            LoginSignupScreen: LoginSignup,
+        },
+        {
+            initialRouteName: 'LoginSignupScreen',
+            navigationOptions: ({ navigation }) => {
+                // Disable navigation bar for LoginSignup bar but display for all other screens
+                if (['LoginSignupScreen'].includes(navigation.state.routeName)) {
+                    return navBarDisabled;
+                } else {
+                    return navBarWithBackButton;
+                }
+            }
+        }
     );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+};
