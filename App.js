@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import {createStackNavigator} from 'react-navigation';
+import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 import LoginSignup from './screens/LoginSignup';
 
@@ -27,21 +27,22 @@ const navBarDisabled = {
     mode: 'modal',
 };
 
-export default getRootStack = () => {
-    return createStackNavigator(
-        {
-            LoginSignupScreen: LoginSignup,
-        },
-        {
-            initialRouteName: 'LoginSignupScreen',
-            navigationOptions: ({ navigation }) => {
-                // Disable navigation bar for LoginSignup bar but display for all other screens
-                if (['LoginSignupScreen'].includes(navigation.state.routeName)) {
-                    return navBarDisabled;
-                } else {
-                    return navBarWithBackButton;
-                }
+const MainNavigator = createStackNavigator(
+    {
+        LoginSignupScreen: LoginSignup,
+    },
+    {
+        initialRouteName: 'LoginSignupScreen',
+        navigationOptions: ({ navigation }) => {
+            // Disable navigation bar for LoginSignup bar but display for all other screens
+            if (['LoginSignupScreen'].includes(navigation.state.routeName)) {
+                return navBarDisabled;
+            } else {
+                return navBarWithBackButton;
             }
         }
-    );
-};
+    }
+);
+
+export default App = createAppContainer(MainNavigator);
+
